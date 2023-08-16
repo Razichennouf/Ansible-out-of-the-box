@@ -50,7 +50,7 @@
         dest: "{{ nginx_conf_path }}"
 </code>
 </pre>
-<h2> Tip 1 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
+<h2> Tip 2 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
 <pre>
 <code>
 ---
@@ -68,7 +68,10 @@
 - name: Setting up number_of_replicas to 0 via API call
   shell: |
        curl -k -H "Content-Type: application/json" -XPUT https://localhost:9200/*/_settings -d '{ "index" : { "number_of_replicas" : 0 } }' -u elastic:"{{ elastic_pw_val.content | b64decode }}"
-
 </code>
 </pre>
+
+<h2> Tip 3 :  Creating an inventory from a MySQL database that contains Hosts data  </h1>
+<h3>Scenario: Imagine you have hosts' data stored in a SQL database. An "out of the box" scenario would involve writing an Ansible playbook that uses a database querying module (like <code>community.general.mysql_query</code> to fetch this data, then dynamically creates an inventory from it.</h3>
+
 <p><strong>Note:</strong> Always back up your file before running this playbook, especially on production environments.</p>
