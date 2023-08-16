@@ -1,7 +1,7 @@
 # Ansible-out-of-the-box
 <!DOCTYPE html>
 
-<h2>Tip 1 : Inserting Content After the Last Occurrence of a Specific Line</h2>
+<h2>Tip 1: Inserting Content After the Last Occurrence of a Specific Line</h2>
 <p>This technique shows how to insert content after the last occurrence of a particular line in a file using Ansible. We employ a combination of the <code>slurp</code> and <code>set_fact</code> modules to compute the insertion point, then use the <code>copy</code> module to write the modified content back.</p>
 
 <h3>Scenario:</h3>
@@ -50,7 +50,7 @@
         dest: "{{ nginx_conf_path }}"
 </code>
 </pre>
-<h2> Tip 2 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
+<h2> Tip 2:  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
 <pre>
 <code>
 ---
@@ -71,8 +71,86 @@
 </code>
 </pre>
 
-<h2> Tip 3 :  Creating an inventory from a MySQL database that contains Hosts data  </h2>
+<h2>Tip 3: Dynamic Inventory Creation from a Database</h2>
 <h3>Scenario:</h3>
-Imagine you have hosts' data stored in a SQL database. An "out of the box" scenario would involve writing an Ansible playbook that uses a database querying module (like <code>community.general.mysql_query</code> to fetch this data, then dynamically creates an inventory from it.
+You have a MySQL database where details of hosts (like IP addresses, hostnames, and roles) are stored. This might be because you have a dynamic cloud environment, where VMs or containers are constantly being created or destroyed, and a system to log these to a database.
+</p>
+
+<h3>Objective:</h3>
+<p>
+You want to fetch these details from the database and use them to create an Ansible dynamic inventory. This allows you to manage these hosts using Ansible playbooks without having to constantly update a static inventory file.
+</p>
+
+<h3>Steps:</h3>
+
+<ol>
+    <li><strong>Set Up a MySQL Database:</strong>
+        <ul>
+            <li>Ensure you have a MySQL server running.</li>
+            <li>Create a table structure to store host details, e.g.:
+            <pre>
+<code>
+CREATE TABLE hosts (
+    id INT PRIMARY KEY,
+    hostname VARCHAR(255),
+    ip_address VARCHAR(255),
+    role VARCHAR(255)
+);
+</code>
+            </pre>
+            </li>
+        </ul>
+    </li>
+
+  <li><strong>Fetch Host Details from the Database:</strong>
+        <ul>
+            <li>Use the <code>community.general.mysql_query</code> Ansible module to fetch data:
+            <pre>
+<code>
+- name: Fetch host details from MySQL
+  community.general.mysql_query:
+    login_host: "your_database_host"
+    login_user: "your_db_user"
+    login_password: "your_db_password"
+    database: "your_database_name"
+    query: SELECT hostname, ip_address, role FROM hosts
+  register: query_result
+</code>
+            </pre>
+            </li>
+        </ul>
+    </li>
+
+   <li><strong>Parse the Fetched Data to Create an Inventory:</strong>
+        <ul>
+            <li>Process the query results to create a dictionary structure suitable for an Ansible inventory. The <code>set_fact</code> module can help with this.</li>
+        </ul>
+    </li>
+
+  <li><strong>Use the Dynamic Inventory:</strong>
+        <ul>
+            <li>Once you've structured the data correctly, you can:
+                <ul>
+                    <li>Write it to a JSON or YAML file and use it as a dynamic inventory source in Ansible.</li>
+                    <li>Directly utilize the constructed data structure in subsequent tasks.</li>
+                </ul>
+            </li>
+            <li>Example of how to run a playbook with the generated inventory:
+            <pre><code>ansible-playbook -i dynamic_inventory.json your_playbook.yml</code></pre>
+            </li>
+        </ul>
+    </li>
+</ol>
+
+<h3>Notes:</h3>
+<ul>
+    <li>The advantage of this setup is that your Ansible inventory will always reflect the actual state of your infrastructure as recorded in the database.</li>
+    <li>This scenario uses MySQL as an example, but it can be adapted for other databases like PostgreSQL, SQLite, etc. by using the appropriate Ansible modules.</li>
+    <li>Consider error-handling strategies. What should the playbook do if it can't connect to the database, or if the returned data doesn't match the expected format?</li>
+    <li>Ensure you secure your database credentials. Using Ansible Vault to encrypt sensitive data is recommended.</li>
+</ul>
+
+<p>This is a high-level overview of the scenario. Actual implementation might vary based on specific database structures, desired inventory formats, and other unique needs.</p>
+
 
 <p><strong>Note:</strong> Always back up your file before running this playbook, especially on production environments.</p>
