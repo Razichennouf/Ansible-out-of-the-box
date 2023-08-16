@@ -71,7 +71,7 @@
 </code>
 </pre>
 
-<h2> Tip 3 :  Creating an inventory from a MySQL database that contains Hosts data  </h1>
+<h2> Tip 3 :  Creating an inventory from a MySQL database that contains Hosts data  </h2>
 <h3>Scenario: Imagine you have hosts' data stored in a SQL database. An "out of the box" scenario would involve writing an Ansible playbook that uses a database querying module (like <code>community.general.mysql_query</code> to fetch this data, then dynamically creates an inventory from it.</h3>
 
 <p><strong>Note:</strong> Always back up your file before running this playbook, especially on production environments.</p>
