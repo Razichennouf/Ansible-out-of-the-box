@@ -50,7 +50,7 @@
         dest: "{{ nginx_conf_path }}"
 </code>
 </pre>
-<h1> Tip 1 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
+<h2> Tip 1 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
 <pre>
 <code>
 ---
