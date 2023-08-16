@@ -1,9 +1,7 @@
 # Ansible-out-of-the-box
 <!DOCTYPE html>
 
-<h1> Ansible Tip: Inserting After Last Occurrence</h1>
-
-<h2>Ansible Tip: Inserting Content After the Last Occurrence of a Specific Line</h2>
+<h2>Tip 1 : Inserting Content After the Last Occurrence of a Specific Line</h2>
 <p>This technique shows how to insert content after the last occurrence of a particular line in a file using Ansible. We employ a combination of the <code>slurp</code> and <code>set_fact</code> modules to compute the insertion point, then use the <code>copy</code> module to write the modified content back.</p>
 
 <h3>Scenario:</h3>
@@ -52,5 +50,25 @@
         dest: "{{ nginx_conf_path }}"
 </code>
 </pre>
+<h1> Tip 1 :  Changing elastic user password and saving it in the current directory for later use in 400 mode, With an API call use case  </h1>
+<pre>
+<code>
+---
+#
+- name: Chaning elastic password
+  shell: |
+     yes | sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u test | grep -oP 'New >
+     chmod 400 elastic_pw
+  #'/New value:/ {print $NF}' output.txt
+  #sed -n 's/New value: //p' output.txt
+- name: retrieve the elastic_pw value
+  slurp:
+     src: /home/ubuntu/elastic_pw
+  register: elastic_pw_val
+- name: Setting up number_of_replicas to 0 via API call
+  shell: |
+       curl -k -H "Content-Type: application/json" -XPUT https://localhost:9200/*/_settings -d '{ "index" : { "number_of_replicas" : 0 } }' -u elastic:"{{ elastic_pw_val.content | b64decode }}"
 
+</code>
+</pre>
 <p><strong>Note:</strong> Always back up your file before running this playbook, especially on production environments.</p>
