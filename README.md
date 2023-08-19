@@ -141,6 +141,35 @@ CREATE TABLE hosts (
         </ul>
     </li>
 </ol>
+<h2>Tip 3: Dynamic keystore creation and changing values inside kibana.yml </h2>
+<h3>Scenario: </h3>
+#- name: Create Kibana Keystore
+#  command: "/usr/share/kibana/bin/kibana-keystore create"
+#  args:
+#      creates: /etc/kibana/kibana.keystore
+#  register: keystore_created
+#  changed_when: keystore_created.rc == 0  # Mark as changed only if keystore was created
+#- name: Add Value to Kibana Keystore
+#  command: "/usr/share/kibana/bin/kibana-keystore add ES_PWD"
+#  args:
+#        stdin: "{{ elastic_pw_val }}\n"  # Provide the ES_PWD value from Ansible variable
+#   when: keystore_created.changed  # Only execute if keystore was created
+#- name: Confirm Keystore Overwrite
+#  command: "/bin/bash"
+#  args:
+#        stdin: "Y\n"  # Automatically answer 'Y' to overwrite prompt
+#  when: keystore_created.changed  # Only execute if keystore was created
+#- name: Appending the elasticsearch credentials in kibana config file
+#  lineinfile:
+#      path: /etc/kibana/kibana.yml
+#      regex: '^#elasticsearch.username:'
+#      line: 'elasticsearch.username: "elastic"'
+#- name: Appending the elasticsearch credentials in kibana config file
+#  lineinfile:
+#      path: /etc/kibana/kibana.yml
+#      regex: '^#elasticsearch.password'
+#      line: 'elasticsearch.username: "${es_pwd}"'
+
 
 <h3>Notes:</h3>
 <ul>
