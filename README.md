@@ -143,6 +143,7 @@ CREATE TABLE hosts (
 </ol>
 <h2>Tip 3: Dynamic keystore creation and changing values inside kibana.yml </h2>
 <h3>Scenario: </h3>
+<code>
 #- name: Create Kibana Keystore
 #  command: "/usr/share/kibana/bin/kibana-keystore create"
 #  args:
@@ -169,7 +170,7 @@ CREATE TABLE hosts (
 #      path: /etc/kibana/kibana.yml
 #      regex: '^#elasticsearch.password'
 #      line: 'elasticsearch.username: "${es_pwd}"'
-
+</code>
 
 <h3>Notes:</h3>
 <ul>
